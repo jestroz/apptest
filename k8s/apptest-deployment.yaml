@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: apptest
+    environment: development
+  name: apptest
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apptest
+      environment: development
+  template:
+    metadata:
+      labels:
+        app: apptest
+        environment: development
+    spec:
+      containers:
+        - name: apptest
+          image: aioria84/apptest-devops:v3
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /status/health
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /status/ready
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          env:
+          - name: NODE_ENV
+            valueFrom:
+              configMapKeyRef:
+                name: apptest-configmap
+                key: NODE_ENV
+          - name: PORT
+            valueFrom:
+              configMapKeyRef:
+                name: apptest-configmap
+                key: PORT
+          - name: DB_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: apptest-configmap
+                key: DB_HOST
+          - name: DB_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: apptest-configmap
+                key: DB_PORT
+          - name: DB_NAME
+            valueFrom:
+              configMapKeyRef:
+                name: apptest-configmap
+                key: DB_NAME
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: apptest-secret
+                key: DB_USER
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: apptest-secret
+                key: DB_PASSWORD
+          - name: DB_URI
+            value: "postgresql://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)"
+      restartPolicy: Always
