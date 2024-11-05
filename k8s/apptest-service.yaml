@@ -1,6 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
+  namespace: apptest
   labels:
     app: apptest-svc
   name: apptest-svc
