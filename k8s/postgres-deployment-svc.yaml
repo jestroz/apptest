@@ -1,6 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  namespace: apptest
   labels:
     io.kompose.service: postgres
   name: postgres
@@ -41,6 +42,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
+  namespace: apptest
   labels:
     io.kompose.service: postgres
   name: postgres-svc
