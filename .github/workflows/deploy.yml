@@ -9,19 +9,9 @@ jobs:
   build-and-deploy:
     runs-on: self-hosted
     steps:
-    - name: Checkout código
+    - name: Code checkout
       uses: actions/checkout@v3
 
-    - name: Construir imagen Docker
+    - name: Build Docker image
       run: |
-        docker build -t my-app:latest .
-
-    - name: Push de la imagen al registro
-      run: |
-        docker tag my-app:latest localhost:5000/my-app:latest
-        docker push localhost:5000/my-app:latest
-
-    - name: Desplegar en k3s
-      run: |
-        kubectl set image deployment/my-app my-app=localhost:5000/my-app:latest --namespace=default
-
+        docker build -t apptest-cicd:latest .
