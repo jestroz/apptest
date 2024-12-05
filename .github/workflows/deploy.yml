@@ -15,3 +15,12 @@ jobs:
     - name: Build Docker image
       run: |
         docker build -t apptest-cicd:latest .
+
+    - name: Push image to docker registry
+      run: |
+        docker tag apptest-cicd:latest aioria84/apptest-devops:v3
+        docker push aioria84/apptest-devops:v3
+
+    - name: Deploy app
+      run: |
+         kubectl apply -f k8s/
