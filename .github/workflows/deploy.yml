@@ -21,6 +21,10 @@ jobs:
         docker tag apptest-cicd:latest aioria84/apptest-devops:v3
         docker push aioria84/apptest-devops:v3
 
+    - name: Create Namespace apptest
+      run: |
+        kubectl create ns apptest
+
     - name: Deploy app
       run: |
          kubectl apply -f k8s/
